@@ -1,0 +1,50 @@
+# Bei jedem Push auf main: Konfiguration auf den Server kopieren und die Galerie neu starten.
+# Es wird nichts gebaut: Immich kommt als fertiges Image von ghcr.io.
+# Secrets (Settings → Secrets and variables → Actions): VM_HOST, VM_USER, VM_SSH_KEY (dieselben wie beim Portal).
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      VM_HOST: ${{ secrets.VM_HOST }}
+      VM_USER: ${{ secrets.VM_USER }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SSH-Zugang vorbereiten
+        if: env.VM_HOST != ''
+        env:
+          VM_SSH_KEY: ${{ secrets.VM_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          if printf '%s' "$VM_SSH_KEY" | grep -q -- '-----BEGIN'; then
+            printf '%s\n' "$VM_SSH_KEY" | tr -d '\r' | sed 's/[[:space:]]*$//' | grep -v '^$' > ~/.ssh/id_vm
+          else
+            printf '%s' "$VM_SSH_KEY" | tr -d '[:space:]' | base64 -d > ~/.ssh/id_vm
+          fi
+          chmod 600 ~/.ssh/id_vm
+          cat >> ~/.ssh/config <<EOT
+          Host vm
+            HostName $VM_HOST
+            User $VM_USER
+            IdentityFile ~/.ssh/id_vm
+            StrictHostKeyChecking accept-new
+          EOT
+
+      - name: Konfiguration kopieren und Galerie starten
+        if: env.VM_HOST != ''
+        run: |
+          ssh vm 'mkdir -p ~/fotos'
+          scp docker-compose.yml env.example deploy.sh storagebox-einhaengen.sh vm:fotos/
+          # Ohne ~/fotos/.env (erster Lauf) wird nur kopiert
+          ssh vm 'cd ~/fotos && if [ -f .env ]; then bash deploy.sh; else echo ".env fehlt – nur Dateien kopiert"; fi'
