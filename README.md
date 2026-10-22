@@ -6,7 +6,8 @@ Hetzner Storage Box, Immich liest sie als externe Bibliothek und gruppiert die G
 
 ```
 Internet → Caddy (Portal, ~/unihockey) ─┬─ liveticker-Domain → web
-                                         └─ FOTOS_DOMAIN      → immich-server:2283 (Netzwerk "web")
+                                         ├─ IMMICH_DOMAIN     → immich-server:2283 (Verwaltung, nur für dich)
+                                         └─ Foto-Seite        → fotos-web (eigenes Projekt, liest Immich per API)
 /mnt/fotos (Storage Box, SMB, nur lesend) → Immich "externe Bibliothek" /external/fotos
 ```
 
@@ -43,11 +44,11 @@ Voraussetzung: Das Portal läuft schon in `~/unihockey` (es legt das Netzwerk `w
    ```bash
    mkdir -p ~/fotos && cd ~/fotos      # Dateien kommen beim ersten Deploy, oder von Hand per scp
    bash storagebox-einhaengen.sh u123456 u123456.your-storagebox.de
-   cp env.example .env && nano .env    # FOTOS_DOMAIN und DB_PASSWORD setzen
+   cp env.example .env && nano .env    # IMMICH_DOMAIN und DB_PASSWORD setzen
    ```
 4. GitHub-Secrets `VM_HOST`, `VM_USER`, `VM_SSH_KEY` in diesem Repo setzen (dieselben Werte wie beim Portal), dann
    *Actions → Deploy → Run workflow*. Oder auf dem Server: `bash deploy.sh`.
-5. `https://<FOTOS_DOMAIN>` öffnen, Admin-Konto anlegen. Dann *Administration → Externe Bibliotheken*: Bibliothek anlegen,
+5. `https://<IMMICH_DOMAIN>` öffnen, Admin-Konto anlegen. Dann *Administration → Externe Bibliotheken*: Bibliothek anlegen,
    Import-Pfad `/external/fotos`, **Scan-Intervall** auf z.B. stündlich stellen (siehe unten).
 
 ## Alben aus der Ordnerstruktur
