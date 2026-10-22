@@ -15,7 +15,7 @@ import urllib.request
 URL = os.environ.get("IMMICH_URL", "http://immich-server:2283").rstrip("/")
 KEY = os.environ.get("IMMICH_API_KEY", "")
 STATE = os.environ.get("STATE_FILE", "/state/state.json")
-INTERVAL = int(os.environ.get("SYNC_INTERVAL", "900"))
+INTERVAL = int(os.environ.get("SYNC_INTERVAL", "300"))
 SEP = " – "
 CHUNK = 500
 
