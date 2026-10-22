@@ -74,9 +74,27 @@ services:
     healthcheck:
       disable: false
 
+  # Legt für jeden Ordner der externen Bibliothek ein Album an und trägt neue Fotos nach (siehe album-sync.py).
+  # Braucht IMMICH_API_KEY in .env; ohne ihn wartet der Dienst nur.
+  album-sync:
+    container_name: immich_album_sync
+    image: python:3.13-alpine
+    command: ["python", "-u", "/app/album-sync.py"]
+    environment:
+      IMMICH_API_KEY: ${IMMICH_API_KEY:-}
+      SYNC_INTERVAL: ${ALBUM_SYNC_INTERVAL:-900}
+    volumes:
+      - ./album-sync.py:/app/album-sync.py:ro
+      - album-sync-state:/state
+    depends_on:
+      - immich-server
+    mem_limit: 64m
+    restart: unless-stopped
+
 networks:
   web:
     external: true
 
 volumes:
   model-cache:
+  album-sync-state:

@@ -45,6 +45,6 @@ jobs:
         if: env.VM_HOST != ''
         run: |
           ssh vm 'mkdir -p ~/fotos'
-          scp docker-compose.yml env.example deploy.sh storagebox-einhaengen.sh vm:fotos/
+          scp docker-compose.yml env.example deploy.sh storagebox-einhaengen.sh album-sync.py vm:fotos/
           # Ohne ~/fotos/.env (erster Lauf) wird nur kopiert
           ssh vm 'cd ~/fotos && if [ -f .env ]; then bash deploy.sh; else echo ".env fehlt – nur Dateien kopiert"; fi'

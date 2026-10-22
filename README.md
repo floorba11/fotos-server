@@ -15,6 +15,7 @@ Internet → Caddy (Portal, ~/unihockey) ─┬─ liveticker-Domain → web
 | `docker-compose.yml` | Immich (Server, Machine Learning, Valkey, Postgres) |
 | `env.example` | Vorlage für `~/fotos/.env` |
 | `storagebox-einhaengen.sh` | Storage Box dauerhaft unter `/mnt/fotos` einhängen |
+| `album-sync.py` | legt pro Ordner der Bibliothek ein Album an und trägt neue Fotos nach (Dienst `album-sync`) |
 | `deploy.sh` | startet Immich und trägt die Domain beim Caddy des Portals ein |
 | `.github/workflows/deploy.yml` | kopiert die Dateien per SSH auf den Server und ruft `deploy.sh` auf |
 
@@ -48,6 +49,20 @@ Voraussetzung: Das Portal läuft schon in `~/unihockey` (es legt das Netzwerk `w
    *Actions → Deploy → Run workflow*. Oder auf dem Server: `bash deploy.sh`.
 5. `https://<FOTOS_DOMAIN>` öffnen, Admin-Konto anlegen. Dann *Administration → Externe Bibliotheken*: Bibliothek anlegen,
    Import-Pfad `/external/fotos`, **Scan-Intervall** auf z.B. stündlich stellen (siehe unten).
+
+## Alben aus der Ordnerstruktur
+
+Der Dienst `album-sync` macht aus jedem Ordner ein Album: `Saison_26-27/URE_D1_vs_Wizards` wird zum Album
+„Saison_26-27 – URE_D1_vs_Wizards". Er läuft alle 15 Minuten (`ALBUM_SYNC_INTERVAL`) und sendet nur neue Fotos.
+
+1. In Immich *Kontoeinstellungen → API-Schlüssel → Neuer API-Schlüssel* (alle Berechtigungen reichen), den Schlüssel
+   nur in `~/fotos/.env` bei `IMMICH_API_KEY=` eintragen.
+2. `cd ~/fotos && bash deploy.sh`
+3. Log ansehen: `docker logs -f immich_album_sync`
+
+Er sieht nur Fotos, die Immich schon eingelesen hat. Neue Dateien erscheinen erst nach dem Bibliotheks-Scan (stündlich oder
+von Hand), danach legt der nächste Lauf das Album an. Fotos direkt im Importordner (ohne Unterordner) bekommen kein Album.
+Das Löschen eines Albums in Immich ist gefahrlos: Beim nächsten Lauf wird es neu angelegt.
 
 ## Spieltags-Ablauf
 
