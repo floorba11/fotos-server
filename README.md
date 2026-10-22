@@ -18,6 +18,19 @@ Internet → Caddy (Portal, ~/unihockey) ─┬─ liveticker-Domain → web
 | `deploy.sh` | startet Immich und trägt die Domain beim Caddy des Portals ein |
 | `.github/workflows/deploy.yml` | kopiert die Dateien per SSH auf den Server und ruft `deploy.sh` auf |
 
+## Auf dem gleichen Server wie der Liveticker
+
+Immich läuft hier neben dem Portal auf einem kleinen Server (Hetzner CX23: 2 vCPU, 4 GB RAM, 40 GB Disk). Das funktioniert,
+ist aber knapp:
+
+- `docker-compose.yml` begrenzt Immich auf rund 3 GB RAM und der Gesichtserkennung auf 1 CPU. Das Portal und die 2 GB Swap
+  bleiben als Puffer.
+- Ein grosser Foto-Scan (hunderte Bilder) dauert lange und macht den Server träge. Starte ihn nicht kurz vor oder während
+  eines Spieltags mit Liveticker.
+- In Immich unter *Administration → Jobs* die gleichzeitigen Jobs auf 1 stellen (Gesichtserkennung, Vorschaubilder).
+- Die 40 GB Disk reichen nicht für Originale. Sie liegen deshalb auf der Storage Box.
+- Wird es zu eng (Portal wird langsam, `docker stats` zeigt Swap-Nutzung), den Server in der Hetzner-Konsole vergrössern.
+
 ## Einrichten (einmalig)
 
 Voraussetzung: Das Portal läuft schon in `~/unihockey` (es legt das Netzwerk `web` an und bedient Caddy).

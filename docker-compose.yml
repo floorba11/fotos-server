@@ -29,6 +29,9 @@ services:
       - redis
       - database
     networks: [default, web]
+    # Der Server ist klein (4 GB RAM, 2 vCPU) und teilt sich die Maschine mit dem Liveticker: Grenzen verhindern,
+    # dass eine Foto-Indexierung das Portal aus dem Speicher drängt.
+    mem_limit: 1g
     restart: always
     healthcheck:
       disable: false
@@ -40,6 +43,8 @@ services:
       - model-cache:/cache
     env_file:
       - .env
+    mem_limit: 1536m
+    cpus: 1.0
     restart: always
     healthcheck:
       disable: false
@@ -49,6 +54,7 @@ services:
     image: docker.io/valkey/valkey:9@sha256:c123e3715db63d06d4ad6964884037aa0d5d4d703939b9929954112889708e1d
     healthcheck:
       test: redis-cli ping | grep -q PONG || exit 1
+    mem_limit: 128m
     restart: always
 
   database:
@@ -63,6 +69,7 @@ services:
       # Die Datenbank muss auf der lokalen Disk liegen, nie auf der Storage Box
       - ${DB_DATA_LOCATION:-./postgres}:/var/lib/postgresql/data
     shm_size: 128mb
+    mem_limit: 512m
     restart: always
     healthcheck:
       disable: false
