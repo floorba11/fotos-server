@@ -54,7 +54,7 @@ Voraussetzung: Das Portal läuft schon in `~/unihockey` (es legt das Netzwerk `w
 ## Alben aus der Ordnerstruktur
 
 Der Dienst `album-sync` macht aus jedem Ordner ein Album: `Saison_26-27/URE_D1_vs_Wizards` wird zum Album
-„Saison_26-27 – URE_D1_vs_Wizards". Er läuft alle 15 Minuten (`ALBUM_SYNC_INTERVAL`) und sendet nur neue Fotos.
+„Saison_26-27 – URE_D1_vs_Wizards". Er läuft alle 5 Minuten (`ALBUM_SYNC_INTERVAL`) und sendet nur neue Fotos.
 
 1. In Immich *Kontoeinstellungen → API-Schlüssel → Neuer API-Schlüssel* (alle Berechtigungen reichen), den Schlüssel
    nur in `~/fotos/.env` bei `IMMICH_API_KEY=` eintragen.

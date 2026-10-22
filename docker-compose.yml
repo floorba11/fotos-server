@@ -82,7 +82,7 @@ services:
     command: ["python", "-u", "/app/album-sync.py"]
     environment:
       IMMICH_API_KEY: ${IMMICH_API_KEY:-}
-      SYNC_INTERVAL: ${ALBUM_SYNC_INTERVAL:-900}
+      SYNC_INTERVAL: ${ALBUM_SYNC_INTERVAL:-300}
     volumes:
       - ./album-sync.py:/app/album-sync.py:ro
       - album-sync-state:/state
