@@ -31,7 +31,7 @@ services:
     networks: [default, web]
     # Der Server ist klein (4 GB RAM, 2 vCPU) und teilt sich die Maschine mit dem Liveticker: Grenzen verhindern,
     # dass eine Foto-Indexierung das Portal aus dem Speicher drängt.
-    mem_limit: 1g
+    mem_limit: 1536m
     restart: always
     healthcheck:
       disable: false

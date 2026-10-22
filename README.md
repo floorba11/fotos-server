@@ -23,7 +23,7 @@ Internet → Caddy (Portal, ~/unihockey) ─┬─ liveticker-Domain → web
 Immich läuft hier neben dem Portal auf einem kleinen Server (Hetzner CX23: 2 vCPU, 4 GB RAM, 40 GB Disk). Das funktioniert,
 ist aber knapp:
 
-- `docker-compose.yml` begrenzt Immich auf rund 3 GB RAM und der Gesichtserkennung auf 1 CPU. Das Portal und die 2 GB Swap
+- `docker-compose.yml` begrenzt Immich auf rund 3,5 GB RAM (Server 1,5 GB, Gesichtserkennung 1,5 GB, Datenbank 0,5 GB) und der Gesichtserkennung auf 1 CPU. Das Portal und die 2 GB Swap
   bleiben als Puffer.
 - Ein grosser Foto-Scan (hunderte Bilder) dauert lange und macht den Server träge. Starte ihn nicht kurz vor oder während
   eines Spieltags mit Liveticker.
