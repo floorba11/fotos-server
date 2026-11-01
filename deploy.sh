@@ -19,6 +19,8 @@ mkdir -p ../unihockey/sites
 rm -f ../unihockey/sites/fotos.caddy   # alter Name, sonst doppelte Adresse
 cat > ../unihockey/sites/immich.caddy <<CADDY
 $IMMICH_DOMAIN {
+	# HSTS: Browser verbinden sich ein Jahr lang nur noch per HTTPS
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains"
 	reverse_proxy immich-server:2283
 }
 CADDY
