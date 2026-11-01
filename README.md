@@ -38,8 +38,10 @@ ist aber knapp:
 Voraussetzung: Das Portal läuft schon in `~/unihockey` (es legt das Netzwerk `web` an und bedient Caddy).
 
 1. **Storage Box** (BX11) bestellen. In der Hetzner-Konsole *Samba-Support* und *Externe Erreichbarkeit* einschalten.
-2. **DNS**: A-Eintrag der Fotos-Subdomain auf die Server-IP. Bei Cloudflare den Eintrag auf *DNS only* (graue Wolke)
-   stellen, sonst begrenzt Cloudflare Uploads auf 100 MB.
+2. **DNS**: A-Eintrag der Immich-Subdomain (z.B. `immich.<domain>`) auf die Server-IP. Bei Cloudflare den Eintrag auf
+   *DNS only* (graue Wolke) stellen, sonst begrenzt Cloudflare Uploads über die Immich-Oberfläche oder -App auf 100 MB.
+   Die Spieltagsfotos kommen per SMB auf die Storage Box und laufen nie über Cloudflare. Die öffentliche Foto-Website
+   (`fotos-web`) läuft dagegen über den Proxy (orange Wolke), damit Cloudflare ihre Besuche zählt.
 3. Auf dem Server `~/fotos` anlegen und einhängen:
    ```bash
    mkdir -p ~/fotos && cd ~/fotos      # Dateien kommen beim ersten Deploy, oder von Hand per scp
