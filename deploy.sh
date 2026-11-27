@@ -21,6 +21,8 @@ cat > ../unihockey/sites/immich.caddy <<CADDY
 $IMMICH_DOMAIN {
 	# HSTS: Browser verbinden sich ein Jahr lang nur noch per HTTPS
 	header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+	# Suchmaschinen sollen nichts aufnehmen (auch keine geteilten Immich-Links mit Gesichtern und Namen)
+	header X-Robots-Tag "noindex, nofollow, noarchive, nosnippet, noimageindex"
 	reverse_proxy immich-server:2283
 }
 CADDY
